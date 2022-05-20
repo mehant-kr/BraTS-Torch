@@ -1,10 +1,9 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torchsummary import summary
 
 
-class DynamicUNet(nn.Module):
+class UNet(nn.Module):
     """ This is the Pytorch version of U-Net Architecture.
     This is not the vanilla version of U-Net.
     For more information about U-Net Architecture check the paper here.
@@ -25,7 +24,7 @@ class DynamicUNet(nn.Module):
             input_channels(int): Input channels for the network. Default: 1
             output_channels(int): Output channels for the final network. Default: 1
         """
-        super(DynamicUNet, self).__init__()
+        super(UNet, self).__init__()
 
         if len(filters) != 5:
             raise Exception(f"Filter list size {len(filters)}, expected 5!")
@@ -126,7 +125,7 @@ class DynamicUNet(nn.Module):
         conv9 = F.relu(self.conv9_2(conv9))
 
         # Output Part of Network.
-        output = F.sigmoid(self.conv10(conv9))
+        output = torch.sigmoid(self.conv10(conv9))
 
         return output
 

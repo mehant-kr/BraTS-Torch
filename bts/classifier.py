@@ -19,7 +19,7 @@ class BrainTumorClassifier():
     def __init__(self, model, device):
         """ Constructor for our BrainTumorClassifier class.
         Parameters:
-            model(DynamicUNet): UNet model to be trained.
+            model(UNet): UNet model to be trained.
             device(torch.device): Device currently used for all computations.
 
         Returns: 
@@ -123,8 +123,10 @@ class BrainTumorClassifier():
             None
         """
         if self.device == 'cpu':
+            print("Running on CPU")
             self.model.load_state_dict(torch.load(path, map_location=device))
         else:
+            print("Running on GPU")
             self.model.load_state_dict(torch.load(path))
             self.model.to(self.device)
 

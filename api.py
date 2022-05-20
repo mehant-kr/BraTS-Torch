@@ -7,7 +7,7 @@ import torchvision.transforms.functional as TF
 from PIL import Image
 import numpy as np
 
-from bts.model import DynamicUNet
+from bts.model import UNet
 from bts.classifier import BrainTumorClassifier
 
 
@@ -73,7 +73,7 @@ class Api:
         """Load the saved model and return it."""
         filter_list = [16, 32, 64, 128, 256]
 
-        model = DynamicUNet(filter_list).to(self.device)
+        model = UNet(filter_list).to(self.device)
         classifier = BrainTumorClassifier(model, self.device)
         model_path = os.path.join(
             'saved_models', 'UNet-[16, 32, 64, 128, 256].pt')
