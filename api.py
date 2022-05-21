@@ -52,7 +52,8 @@ class Api:
                 save_path = os.path.join(ofp,save_path)
                 
             self._save_image(output, save_path)
-            print(f'Output Image Saved At {save_path}')
+            self.calculate_area(output, save_path)
+            print(f'Output Image Saved At *** {save_path}')
 
         elif folder != None:
             image_list = os.listdir(folder)
@@ -67,6 +68,7 @@ class Api:
                 save_path = os.path.join(
                     odp, save_path) if odp else os.path.join(folder, save_path)
                 self._save_image(output, save_path)
+                self.calculate_area(output, save_path)
                 print(f'Output Image Saved At {save_path}')
 
     def _load_model(self):
@@ -104,7 +106,44 @@ class Api:
         ])
 
         image = default_transformation(Image.open(file_name))
+        # print("image type: ", type(image))
+        # print(image.width)
+        # print(image.height)
+        # print("size: ", image.size)
+
         return TF.to_tensor(image)
+
+    def calculate_area(self, image, path):
+
+        # calculating length of one pixel
+        from tkinter import Tk
+        root = Tk()
+        # getting screen's height, width in mm
+        height, width = root.winfo_screenmmheight(), root.winfo_screenmmwidth()
+        # getting screen's height, width in pixel
+        p_height, p_width = root.winfo_screenheight(), root.winfo_screenwidth()
+
+        # length of a pixel (Thresholding)
+        h_pixel = height/p_height
+        w_pixel = width/p_width
+        pixel_length = np.mean((h_pixel, w_pixel))
+        print("pixel_length: ", pixel_length)
+
+        # Area of image
+        count = np.count_nonzero(image)
+        print("image.shape: ", image.shape)
+
+        area = np.sqrt(count) * pixel_length
+        print("area: ", area)
+        # if ( < 5):
+        #     print("1")
+        # elif (10000 >= count > 5000 ):
+        #     print("2")
+        # elif (count < 10000):
+        #     print("3")
+
+        # black = 0
+        # white = 255
 
 
 if __name__ == "__main__":
